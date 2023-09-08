@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Calculadora de Promedio - Carreras</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('https://www.xtrafondos.com/wallpapers/fibra-de-carbon-2739.jpg');
+      background-size: cover;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .input-container {
+      margin-bottom: 10px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    .btn-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .btn-container button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    #promedio {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Calculadora de Promedio - Carreras</h1>
+
+    <div id="tiempos-container">
+      <div class="input-container">
+        <label for="input-tiempo1">Tiempo 1 (mm:ss.décimas):</label>
+        <input type="text" class="input-tiempo" id="input-tiempo1">
+      </div>
+    </div>
+
+    <div class="btn-container">
+      <button onclick="agregarTiempo()">Agregar Tiempo</button>
+      <button onclick="calcularPromedio()">Calcular Promedio</button>
+    </div>
+
+    <div id="promedio"></div>
+  </div>
+
+  <script>
+    var contadorTiempos = 1;
+
+    function agregarTiempo() {
+      if (contadorTiempos >= 10) {
+        return;
+      }
+
+      contadorTiempos++;
+
+      var tiemposContainer = document.getElementById('tiempos-container');
+      var nuevoInputContainer = document.createElement('div');
+      nuevoInputContainer.className = 'input-container';
+
+      var nuevoLabel = document.createElement('label');
+      nuevoLabel.textContent = 'Tiempo ' + contadorTiempos + ' (mm:ss.décimas):';
+
+      var nuevoInput = document.createElement('input');
+      nuevoInput.type = 'text';
+      nuevoInput.className = 'input-tiempo';
+      nuevoInput.id = 'input-tiempo' + contadorTiempos;
+
+      nuevoInputContainer.appendChild(nuevoLabel);
+      nuevoInputContainer.appendChild(nuevoInput);
+      tiemposContainer.appendChild(nuevoInputContainer);
+    }
+
+    function calcularPromedio() {
+      var tiempos = document.getElementsByClassName('input-tiempo');
+      var totalMinutos = 0;
+      var totalSegundos = 0;
+      var totalDecimales = 0;
+      var mejorTiempo = Infinity; // Inicializar con un valor alto para encontrar el mínimo
+      
+      for (var i = 0; i < tiempos.length; i++) {
+        var tiempoParts = tiempos[i].value.split(':');
+        var minutos = parseInt(tiempoParts[0]);
+        var segundos = parseFloat(tiempoParts[1]);
+        totalMinutos += minutos;
+        totalSegundos += segundos;
+        totalDecimales += segundos % 1;
+
+        // Actualizar el mejor tiempo si es menor al almacenado previamente
+        var tiempoEnSegundos = minutos * 60 + segundos;
+        if (tiempoEnSegundos < mejorTiempo) {
+          mejorTiempo = tiempoEnSegundos;
+        }
+      }
+
+      var promedioMinutos = Math.floor(totalMinutos / tiempos.length);
+      var promedioSegundos = totalSegundos / tiempos.length;
+      var promedioDecimales = totalDecimales / tiempos.length;
+
+      var promedioContainer = document.getElementById('promedio');
+      promedioContainer.textContent = 'Promedio: ' + promedioMinutos + ':' + promedioSegundos.toFixed(0).padStart(2, '0') + '.' + promedioDecimales.toFixed(3).slice(-3);
+
+      // Obtener el elemento del mejor tiempo
+      var mejorTiempoElement = document.getElementById('input-tiempo' + (mejorTiempoIndex + 1));
+
+      // Aplicar estilo al mejor tiempo
+      mejorTiempoElement.style.color = 'purple';
+    }
+  </script>
+</body>
+</html>
